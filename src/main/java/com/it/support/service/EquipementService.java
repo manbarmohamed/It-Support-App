@@ -23,4 +23,20 @@ public class EquipementService {
         BooleanExpression predicate = qEquipement.isNotNull();
         return (List<Equipement>) equipementRepository.findAll(predicate);
     }
+
+    public Equipement findOne(Long id) {
+        QEquipement qe = QEquipement.equipement;
+        BooleanExpression predicate = qe.id.eq(id);
+        return equipementRepository.findOne(predicate).orElse(null);
+    }
+
+    public Equipement save(Equipement equipment) {
+        return equipementRepository.save(equipment);
+    }
+    public Equipement update(Long id ,Equipement equipement) throws Exception {
+        Equipement equipementUpdated = equipementRepository.findById(id).orElseThrow(()->new Exception("notfound"));
+        equipementUpdated.setNome(equipement.getNome());
+        equipementUpdated.setType(equipement.getType());
+        return equipementRepository.save(equipementUpdated);
+    }
 }

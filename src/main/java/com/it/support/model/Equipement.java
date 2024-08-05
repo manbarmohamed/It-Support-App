@@ -1,6 +1,7 @@
 package com.it.support.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.it.support.enums.EqType;
 import com.it.support.enums.EquipementStatus;
 import jakarta.persistence.*;
@@ -28,6 +29,7 @@ public class Equipement {
     private EquipementStatus status;
 
     @OneToMany
+    @JsonIgnore
     private List<Panne> pannes;
 
 
