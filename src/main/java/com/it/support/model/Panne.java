@@ -23,14 +23,8 @@ public class Panne {
     private LocalDateTime signalDate;
     @Enumerated(EnumType.STRING)
     private PanneStatus status;
-
-    @OneToOne(mappedBy = "panne")
-    private Ticket ticket;
-
     @ManyToOne
+    @JoinColumn(name = "equepement_id")
     private Equipement equipment;
-
-    @ManyToOne
-    private User user;
 
 }

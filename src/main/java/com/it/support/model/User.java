@@ -1,6 +1,7 @@
 package com.it.support.model;
 
 
+import com.it.support.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @DiscriminatorValue("USER")
 public class User extends Person{
@@ -22,9 +22,8 @@ public class User extends Person{
     @OneToMany
     private List<Ticket> tickets;
 
-
-    @Override
-    public String getRole() {
-        return "ROLE_USER";
+    public User(Long id, String name, String username, String password, Role role) {
+        super(id, name, username, password, role);
+        this.setRole(Role.USER);
     }
 }

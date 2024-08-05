@@ -1,6 +1,7 @@
 package com.it.support.model;
 
 
+import com.it.support.enums.Role;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -22,8 +23,8 @@ public class Technicien extends Person {
    @OneToMany(mappedBy = "technicien")
    private List<Ticket> tickets;
 
-    @Override
-    public String getRole() {
-        return "ROLE_TECH";
+    public Technicien(Long id, String name, String username, String password, Role role) {
+        super(id, name, username, password, role);
+        this.setRole(Role.TECH);
     }
 }

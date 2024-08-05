@@ -2,12 +2,12 @@ package com.it.support.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.it.support.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 @Setter
@@ -23,6 +23,6 @@ public abstract class Person {
     private String name;
     private String username;
     private String password;
+    private Role role;
 
-    public abstract String getRole();
 }

@@ -25,10 +25,10 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
 
-    @OneToOne
-    private Panne panne;
     @ManyToOne
+    @JoinColumn(name = "tech_id")
     private Technicien technicien;
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 }
