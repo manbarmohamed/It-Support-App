@@ -1,6 +1,7 @@
 package com.it.support.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.it.support.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,8 +19,10 @@ import java.util.List;
 public class User extends Person{
 
     @OneToMany
+    @JsonIgnore
     private List<Panne> pannes;
     @OneToMany
+    @JsonIgnore
     private List<Ticket> tickets;
 
     public User(Long id, String name, String username, String password, Role role) {

@@ -1,6 +1,7 @@
 package com.it.support.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.it.support.enums.Role;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -21,6 +22,7 @@ import java.util.List;
 public class Technicien extends Person {
 
    @OneToMany(mappedBy = "technicien")
+   @JsonIgnore
    private List<Ticket> tickets;
 
     public Technicien(Long id, String name, String username, String password, Role role) {

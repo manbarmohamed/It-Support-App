@@ -23,6 +23,7 @@ public abstract class Person {
     private String name;
     private String username;
     private String password;
+    @Enumerated(EnumType.STRING)
     private Role role;
 
 }
