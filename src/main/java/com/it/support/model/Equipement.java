@@ -31,6 +31,8 @@ public class Equipement {
     @OneToMany
     @JsonIgnore
     private List<Panne> pannes;
+    @ManyToOne
+    private User user;
 
 
 }

@@ -30,5 +30,5 @@ public class PanneService {
         BooleanExpression predicate = panne.equipment.id.eq(equipementId);
         return (List<Panne>) panneRepository.findAll(predicate);
     }
-    
+
 }

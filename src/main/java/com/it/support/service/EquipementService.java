@@ -5,7 +5,9 @@ import com.it.support.enums.EquipementStatus;
 import com.it.support.model.Equipement;
 
 import com.it.support.model.QEquipement;
+import com.it.support.model.User;
 import com.it.support.repository.EquipementRepository;
+import com.it.support.repository.UserRepository;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EquipementService {
     private final EquipementRepository equipementRepository;
+    private final UserRepository userRepository;
 
     public List<Equipement> findAll() {
         QEquipement qEquipement = QEquipement.equipement;
@@ -32,6 +35,7 @@ public class EquipementService {
     }
 
     public Equipement save(Equipement equipment) {
+        equipment.setStatus(EquipementStatus.AVAILABLE);
         return equipementRepository.save(equipment);
     }
     public Equipement update(Long id ,Equipement equipement) throws Exception {
@@ -42,13 +46,21 @@ public class EquipementService {
     }
 
     public void delete(Long id) throws Exception {
-        Equipement equipement = equipementRepository.findById(id).orElse(null);
+        Equipement equipement = equipementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Equipement non trouvé"));
 
-        if(equipement!=null && equipement.getStatus()== EquipementStatus.HORS_SERVICE || equipement.getStatus()== EquipementStatus.ABSOLUTE){
+        if (equipement.getStatus() == EquipementStatus.HORS_SERVICE) {
             equipementRepository.delete(equipement);
+        } else {
+            throw new IllegalStateException("Seuls les équipements obsolètes ou hors service peuvent être supprimés");
         }
-        throw new Exception("Equipement is active");
+    }
 
-
+    public Equipement assigneEquipementToUser(Long equipementId, Long userId) {
+        Equipement equipement = equipementRepository.findById(equipementId).orElseThrow(()->new RuntimeException("Equipement Not Found!!"));
+        User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User Not Found!!"));
+        equipement.setUser(user);
+        equipement.setStatus(EquipementStatus.ACTIVE);
+        return equipementRepository.save(equipement);
     }
 }

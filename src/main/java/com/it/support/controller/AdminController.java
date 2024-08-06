@@ -17,7 +17,6 @@ public class AdminController {
 
     @GetMapping("all")
     public List<Equipement> getEquipement() {
-
         return equipementService.findAll();
     }
     @GetMapping("get/{id}")
@@ -36,5 +35,10 @@ public class AdminController {
     @DeleteMapping("deleteEq/{id}")
     public void deleteEquipement(@PathVariable Long id) throws Exception {
         equipementService.delete(id);
+    }
+    @PostMapping("assigne/{user_id}/{equipement_id}")
+    public Equipement assigneEquipement(@PathVariable String user_id, @PathVariable String equipement_id) throws Exception {
+        return equipementService.assigneEquipementToUser(Long.valueOf(user_id),Long.valueOf(equipement_id));
+
     }
 }

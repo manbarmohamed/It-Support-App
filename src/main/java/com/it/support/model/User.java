@@ -24,6 +24,9 @@ public class User extends Person{
     @OneToMany
     @JsonIgnore
     private List<Ticket> tickets;
+    @OneToMany
+    @JsonIgnore
+    private List<Equipement> equipements;
 
     public User(Long id, String name, String username, String password, Role role) {
         super(id, name, username, password, role);
