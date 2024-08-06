@@ -1,5 +1,8 @@
 package com.it.support.enums;
 
 public enum EquipementStatus {
-    eq
+    ACTIVE,
+    HORS_SERVICE,
+    ABSOLUTE
+
 }

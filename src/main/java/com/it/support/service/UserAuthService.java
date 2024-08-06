@@ -40,7 +40,7 @@ public class UserAuthService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getName())
+                .withUsername(user.getUsername())
                 .password(user.getPassword())
                 .roles(user.getRole().name())
                 .build();

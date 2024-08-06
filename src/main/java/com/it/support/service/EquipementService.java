@@ -1,6 +1,7 @@
 package com.it.support.service;
 
 
+import com.it.support.enums.EquipementStatus;
 import com.it.support.model.Equipement;
 
 import com.it.support.model.QEquipement;
@@ -38,5 +39,16 @@ public class EquipementService {
         equipementUpdated.setNome(equipement.getNome());
         equipementUpdated.setType(equipement.getType());
         return equipementRepository.save(equipementUpdated);
+    }
+
+    public void delete(Long id) throws Exception {
+        Equipement equipement = equipementRepository.findById(id).orElse(null);
+
+        if(equipement!=null && equipement.getStatus()== EquipementStatus.HORS_SERVICE || equipement.getStatus()== EquipementStatus.ABSOLUTE){
+            equipementRepository.delete(equipement);
+        }
+        throw new Exception("Equipement is active");
+
+
     }
 }
