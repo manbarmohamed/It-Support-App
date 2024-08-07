@@ -1,48 +1,55 @@
 package com.it.support.service;
 
 
-import com.it.support.exception.EquipementNotFoundException;
+
+import com.it.support.dto.PanneDto;
 import com.it.support.exception.PanneNotFoundException;
+import com.it.support.mapper.PanneMapper;
 import com.it.support.model.Panne;
-import com.it.support.model.QPanne;
+
 import com.it.support.repository.EquipementRepository;
 import com.it.support.repository.PanneRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PanneService {
 
+    private final PanneMapper panneMapper;
     private final PanneRepository panneRepository;
-    private final EquipementRepository equipementRepository;
-    @PersistenceContext
-    private EntityManager entityManager;
 
-    public Panne save(Panne panne) {
-        return panneRepository.save(panne);
+
+    public PanneDto save(PanneDto panneDto) {
+        Panne panne = panneMapper.toEntity(panneDto);
+        Panne savedPanne = panneRepository.save(panne);
+        return panneMapper.toDto(savedPanne);
     }
-    public List<Panne> findAll() {
-        QPanne panne = QPanne.panne;
-        BooleanExpression predicate = panne.isNotNull();
-        return (List<Panne>) panneRepository.findAll(predicate);
+
+    public List<PanneDto> findAll() {
+        List<Panne> pannes = panneRepository.findAll();
+        return pannes.stream()
+                .map(panneMapper::toDto)
+                .toList();
     }
 
     public void delete(Long id) {
         panneRepository.deleteById(id);
     }
 
-    public Panne updatePanne(Long id,Panne panne) {
-        Panne panneUpdated = panneRepository.findById(id).orElseThrow(()->new PanneNotFoundException("Panne not found"));;
-        panneUpdated.setNom(panne.getNom());
-        return panneRepository.save(panneUpdated);
+    public PanneDto updatePanne(Long id, PanneDto panneDto) {
+        Panne panneUpdated = panneRepository.findById(id)
+                .orElseThrow(() -> new PanneNotFoundException("Panne not found"));
+        panneMapper.partialUpdate(panneDto, panneUpdated);
+        Panne savedPanne = panneRepository.save(panneUpdated);
+        return panneMapper.toDto(savedPanne);
     }
 
 
@@ -61,5 +68,11 @@ public class PanneService {
 //        return query.from(panne)
 //                .where(panne.status.eq(status))
 //                .fetch();
+//    }
+
+//    public List<Panne> findAll() {
+//        QPanne panne = QPanne.panne;
+//        BooleanExpression predicate = panne.isNotNull();
+//        return (List<Panne>) panneRepository.findAll(predicate);
 //    }
 }

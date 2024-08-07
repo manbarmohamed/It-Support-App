@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 @EnableJpaRepositories(basePackageClasses = EquipementRepository.class)
-public interface EquipementRepository extends JpaRepository<Equipement, Long> , QuerydslPredicateExecutor<Equipement> {
+public interface EquipementRepository extends JpaRepository<Equipement, Long>{
 }

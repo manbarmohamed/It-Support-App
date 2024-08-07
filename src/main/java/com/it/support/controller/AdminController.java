@@ -1,14 +1,13 @@
 package com.it.support.controller;
 
 
-import com.it.support.dto.AuthRequestDTO;
-import com.it.support.dto.JwtResponseDTO;
+import com.it.support.dto.*;
 import com.it.support.model.*;
 import com.it.support.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,33 +52,36 @@ public class AdminController {
 
 
 
-    @GetMapping("all")
-    public List<Equipement> getEquipement() {
-        return equipementService.findAll();
+    @GetMapping("allEquipment")
+    public ResponseEntity<List<EquipementDto>> getAllEquipements() {
+        List<EquipementDto> equipements = equipementService.findAll();
+        return ResponseEntity.ok(equipements);
     }
-    @GetMapping("get/{id}")
-    public Equipement getEquipement(@PathVariable Long id) {
-        return equipementService.findOne(id);
+    @GetMapping("getEquipmentById/{id}")
+    public ResponseEntity<EquipementDto> getEquipementById(@PathVariable Long id) {
+        EquipementDto equipement = equipementService.findOne(id);
+        return ResponseEntity.ok(equipement);
     }
-    @PutMapping("/{id}")
-    public Equipement getEquipement(@PathVariable Long id, @RequestBody Equipement equipement) throws Exception {
-        return equipementService.update(id,equipement);
+    @PutMapping("editEquipment/{id}")
+    public ResponseEntity<EquipementDto> updateEquipement(@PathVariable Long id, @RequestBody EquipementDto equipementDto) {
+        EquipementDto updatedEquipement = equipementService.update(id, equipementDto);
+        return ResponseEntity.ok(updatedEquipement);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("addEq")
-    public Equipement addEquipement(@RequestBody Equipement equipement) throws Exception {
-        return equipementService.save(equipement);
+    public ResponseEntity<EquipementDto> createEquipement(@RequestBody EquipementDto equipementDto) {
+        EquipementDto createdEquipement = equipementService.save(equipementDto);
+        return ResponseEntity.ok(createdEquipement);
     }
     @DeleteMapping("deleteEq/{id}")
-    public void deleteEquipement(@PathVariable Long id) throws Exception {
+    public void deleteEquipement(@PathVariable Long id){
         equipementService.delete(id);
     }
-    @PostMapping("assigne/{equipement_id}/{user_id}")
-    public Equipement assigneEquipement(@PathVariable Long equipement_id, @PathVariable Long user_id ) throws Exception {
-        return equipementService.assigneEquipementToUser(equipement_id,user_id);
+    @PostMapping("assignEqToUser/{equipementId}/{userId}")
+    public Equipement assignEquipementToUser(@PathVariable Long equipementId, @PathVariable Long userId) {
+        return equipementService.assigneEquipementToUser(equipementId, userId);
     }
-
 //    @GetMapping("/with-pannes")
 //    public ResponseEntity<List<Equipement>> getEquipementsWithPannes() {
 //        return ResponseEntity.ok(equipementService.findEquipementsWithPannes());
@@ -93,31 +95,36 @@ public class AdminController {
     //Panne Operation
 
     @GetMapping("allPanne")
-    public List<Panne> getPanne() {
-        return panneService.findAll();
+    public ResponseEntity<List<PanneDto>> getAllPannes() {
+        List<PanneDto> pannes = panneService.findAll();
+        return ResponseEntity.ok(pannes);
     }
     @PostMapping("savePanne")
-    public Panne savePanne(@RequestBody Panne panne) throws Exception {
-        return panneService.save(panne);
+    public ResponseEntity<PanneDto> createPanne(@RequestBody PanneDto panneDto) {
+        PanneDto createdPanne = panneService.save(panneDto);
+        return ResponseEntity.ok(createdPanne);
     }
     @PutMapping("editPanne/{id}")
-    public Panne editPanne(@PathVariable Long id, @RequestBody Panne panne) throws Exception {
-        return panneService.updatePanne(id,panne);
+    public ResponseEntity<PanneDto> updatePanne(@PathVariable Long id, @RequestBody PanneDto panneDto) {
+        PanneDto updatedPanne = panneService.updatePanne(id, panneDto);
+        return ResponseEntity.ok(updatedPanne);
     }
     @DeleteMapping("delPanne/{id}")
-    public void deletePanne(@PathVariable Long id) throws Exception {
+    public void deletePanne(@PathVariable Long id)  {
         panneService.delete(id);
     }
     //Historique
     @GetMapping("historique/{id}")
-    public List<PanneEquipement> historiqueEquipement(@PathVariable Long id) throws Exception {
+    public List<PanneEquipement> historiqueEquipement(@PathVariable Long id){
         return panneEquipementService.findAllByEquipementId(id);
     }
 
     //ticket
-    @PostMapping("attribuerTicket/{ticket_id}/{tech_id}")
-    public Ticket attribuerTicketToTech(@PathVariable Long ticket_id, @PathVariable Long tech_id) throws Exception {
-        return ticketService.attribuerToTechnician(ticket_id,tech_id);
+    @PostMapping("assignTicketToTech/{ticketId}/{technicianId}")
+    public ResponseEntity<Ticket> assignToTechnician(
+            @PathVariable Long ticketId, @PathVariable Long technicianId) {
+        Ticket updatedTicket = ticketService.attribuerToTechnician(ticketId, technicianId);
+        return ResponseEntity.ok(updatedTicket);
     }
 
 }

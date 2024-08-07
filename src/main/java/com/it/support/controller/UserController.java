@@ -1,6 +1,7 @@
 package com.it.support.controller;
 
 
+import com.it.support.dto.TicketDto;
 import com.it.support.enums.TicketStatus;
 import com.it.support.model.Panne;
 import com.it.support.model.PanneEquipement;
@@ -27,16 +28,17 @@ public class UserController {
 //    }
 
     @PostMapping("signal/{panne_id}/{equipement_id}")
-    public PanneEquipement signalerPanne(@PathVariable Long panne_id, @PathVariable Long equipement_id) {
+    public PanneEquipement signalerPanne(@PathVariable("panne_id") Long panne_id, @PathVariable("equipement_id") Long equipement_id) {
         return panneEquipementService.signalPanne(panne_id, equipement_id);
     }
-    @GetMapping("findTicketByUser/{user_id}")
-    public List<Ticket> findTicketByUser(@PathVariable Long user_id) {
-        return ticketService.findTicketsByUser(user_id);
+    @GetMapping("/ticketByUser/{userId}")
+    public ResponseEntity<List<TicketDto>> getTicketsByUser(@PathVariable("userId") Long userId) {
+        List<TicketDto> tickets = ticketService.findTicketsByUser(userId);
+        return ResponseEntity.ok(tickets);
     }
     @PostMapping("saveTicket")
-    public Ticket saveTicket(@RequestBody Ticket ticket) {
-        ticket.setStatus(TicketStatus.PENDING);
-        return ticketService.save(ticket);
+    public ResponseEntity<TicketDto> createTicket(@RequestBody TicketDto ticketDto) {
+        TicketDto createdTicket = ticketService.save(ticketDto);
+        return ResponseEntity.ok(createdTicket);
     }
 }
