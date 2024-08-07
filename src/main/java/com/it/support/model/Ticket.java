@@ -31,4 +31,8 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne
+    private Equipement equipement;
+    @ManyToOne
+    private Panne panne;
 }

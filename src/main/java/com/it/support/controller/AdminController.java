@@ -2,17 +2,22 @@ package com.it.support.controller;
 
 
 import com.it.support.model.Equipement;
+import com.it.support.model.Panne;
 import com.it.support.service.EquipementService;
+import com.it.support.service.PanneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/admin/")
 public class AdminController {
     private final EquipementService equipementService;
+    private final PanneService panneService;
 
 
     @GetMapping("all")
@@ -28,6 +33,7 @@ public class AdminController {
         return equipementService.update(id,equipement);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("addEq")
     public Equipement addEquipement(@RequestBody Equipement equipement) throws Exception {
         return equipementService.save(equipement);
@@ -36,9 +42,38 @@ public class AdminController {
     public void deleteEquipement(@PathVariable Long id) throws Exception {
         equipementService.delete(id);
     }
-    @PostMapping("assigne/{user_id}/{equipement_id}")
-    public Equipement assigneEquipement(@PathVariable String user_id, @PathVariable String equipement_id) throws Exception {
-        return equipementService.assigneEquipementToUser(Long.valueOf(user_id),Long.valueOf(equipement_id));
+    @PostMapping("assigne/{equipement_id}/{user_id}")
+    public Equipement assigneEquipement(@PathVariable Long equipement_id, @PathVariable Long user_id ) throws Exception {
+        return equipementService.assigneEquipementToUser(equipement_id,user_id);
+    }
 
+//    @GetMapping("/with-pannes")
+//    public ResponseEntity<List<Equipement>> getEquipementsWithPannes() {
+//        return ResponseEntity.ok(equipementService.findEquipementsWithPannes());
+//    }
+//    @GetMapping("/status/{status}")
+//    public ResponseEntity<List<Panne>> getPannesByStatus(@PathVariable PanneStatus status) {
+//        return ResponseEntity.ok(panneService.findPannesByStatus(status));
+//    }
+
+
+    //Panne Operation
+
+    @GetMapping("allPanne")
+    public List<Panne> getPanne() {
+        return panneService.findAll();
+    }
+    @PostMapping("savePanne")
+    public Panne savePanne(@RequestBody Panne panne) throws Exception {
+        return panneService.save(panne);
+    }
+    @PutMapping("editPanne/{id}")
+    public Panne editPanne(@PathVariable Long id, @RequestBody Panne panne) throws Exception {
+        return panneService.updatePanne(id,panne);
+    }
+
+    @DeleteMapping("delPanne/{id}")
+    public void deletePanne(@PathVariable Long id) throws Exception {
+        panneService.delete(id);
     }
 }
