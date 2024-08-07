@@ -28,12 +28,13 @@ public class PanneEquipementService {
         return panneEquipementRepository.findAllByEquipementId(equipementId);
     }
 
+
     public PanneEquipement signalPanne(Long panneId, Long equipementId) {
         Panne panne = panneRepository.findById(panneId).orElseThrow(()->new PanneNotFoundException("Panne not found"));
         Equipement equipement = equipementRepository.findById(equipementId).orElseThrow(()->new EquipementNotFoundException("Equipment not found"));
         equipement.setStatus(EquipementStatus.PANE);
         equipementRepository.save(equipement);
         var signal = new PanneEquipement(new PanneEquipementKey(equipement.getId(),  panne.getId()), equipement,panne);
-return panneEquipementRepository.save(signal);
+        return panneEquipementRepository.save(signal);
     }
 }

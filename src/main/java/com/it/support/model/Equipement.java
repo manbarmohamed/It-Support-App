@@ -32,9 +32,11 @@ public class Equipement {
     private User user;
 
     @OneToMany(mappedBy = "equipement")
-    List<Ticket> tickets;
+    @JsonIgnore
+    private List<Ticket> tickets;
 
     @OneToMany(mappedBy = "equipement")
+    @JsonIgnore
     private List<PanneEquipement> panneEquipements;
 
 

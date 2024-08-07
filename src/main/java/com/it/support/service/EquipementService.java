@@ -25,10 +25,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EquipementService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
     private final EquipementRepository equipementRepository;
     private final UserRepository userRepository;
 
@@ -46,13 +47,12 @@ public class EquipementService {
 
     public Equipement save(Equipement equipment) {
         equipment.setStatus(EquipementStatus.AVAILABLE);
-        equipment.setUser(null);
+
         return equipementRepository.save(equipment);
     }
     public Equipement update(Long id ,Equipement equipement) throws Exception {
         Equipement equipementUpdated = equipementRepository.findById(id).orElseThrow(()->new EquipementNotFoundException("equipement not found"));
         equipementUpdated.setNome(equipement.getNome());
-
         return equipementRepository.save(equipementUpdated);
     }
 
