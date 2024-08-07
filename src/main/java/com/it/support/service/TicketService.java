@@ -47,8 +47,7 @@ public class TicketService {
 
         JPAQuery<Ticket> query = new JPAQuery<>(entityManager);
         return query.from(ticket)
-                .where(ticket.user.id.eq(userId)
-                        .and(ticket.status.eq(status)))
+                .where(ticket.user.id.eq(userId))
                 .fetch();
     }
 
