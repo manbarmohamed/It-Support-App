@@ -1,23 +1,20 @@
 package com.it.support.service;
 
 
+import com.it.support.dto.EquipementDto;
 import com.it.support.enums.EquipementStatus;
 import com.it.support.exception.EquipementNotFoundException;
 import com.it.support.exception.UserNotFoundException;
+import com.it.support.mapper.EquipementMapper;
 import com.it.support.model.Equipement;
 
-import com.it.support.model.QEquipement;
-import com.it.support.model.QPanne;
+
 import com.it.support.model.User;
 import com.it.support.repository.EquipementRepository;
 import com.it.support.repository.UserRepository;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,35 +25,42 @@ import java.util.List;
 @Transactional
 public class EquipementService {
 
-//    @PersistenceContext
-//    private EntityManager entityManager;
+
     private final EquipementRepository equipementRepository;
     private final UserRepository userRepository;
 
-    public List<Equipement> findAll() {
-        QEquipement qEquipement = QEquipement.equipement;
-        BooleanExpression predicate = qEquipement.isNotNull();
-        return (List<Equipement>) equipementRepository.findAll(predicate);
+
+    private final EquipementMapper equipementMapper;
+
+    public List<EquipementDto> findAll() {
+        List<Equipement> equipements = equipementRepository.findAll();
+        return equipements.stream()
+                .map(equipementMapper::toDto)
+                .toList();
     }
 
-    public Equipement findOne(Long id) {
-        QEquipement qe = QEquipement.equipement;
-        BooleanExpression predicate = qe.id.eq(id);
-        return equipementRepository.findOne(predicate).orElseThrow(()->new EquipementNotFoundException("equipement not found"));
+    public EquipementDto findOne(Long id) {
+        Equipement equipement = equipementRepository.findById(id)
+                .orElseThrow(() -> new EquipementNotFoundException("Equipement not found"));
+        return equipementMapper.toDto(equipement);
     }
 
-    public Equipement save(Equipement equipment) {
-        equipment.setStatus(EquipementStatus.AVAILABLE);
-
-        return equipementRepository.save(equipment);
-    }
-    public Equipement update(Long id ,Equipement equipement) throws Exception {
-        Equipement equipementUpdated = equipementRepository.findById(id).orElseThrow(()->new EquipementNotFoundException("equipement not found"));
-        equipementUpdated.setNome(equipement.getNome());
-        return equipementRepository.save(equipementUpdated);
+    public EquipementDto save(EquipementDto equipementDto) {
+        Equipement equipement = equipementMapper.toEntity(equipementDto);
+        equipement.setStatus(EquipementStatus.AVAILABLE);
+        Equipement savedEquipement = equipementRepository.save(equipement);
+        return equipementMapper.toDto(savedEquipement);
     }
 
-    public void delete(Long id) throws Exception {
+    public EquipementDto update(Long id, EquipementDto equipementDto) {
+        Equipement equipementUpdated = equipementRepository.findById(id)
+                .orElseThrow(() -> new EquipementNotFoundException("Equipement not found"));
+        equipementMapper.partialUpdate(equipementDto, equipementUpdated);
+        Equipement savedEquipement = equipementRepository.save(equipementUpdated);
+        return equipementMapper.toDto(savedEquipement);
+    }
+
+    public void delete(Long id) {
         Equipement equipement = equipementRepository.findById(id)
                 .orElseThrow(() -> new EquipementNotFoundException("Equipement not found"));
 
@@ -87,4 +91,18 @@ public class EquipementService {
 //                .distinct()
 //                .fetch();
 //    }
+
+   //    public List<Equipement> findAll() {
+//        QEquipement qEquipement = QEquipement.equipement;
+//        BooleanExpression predicate = qEquipement.isNotNull();
+//        return (List<Equipement>) equipementRepository.findAll(predicate);
+//    }
+//public Equipement findOne(Long id) {
+//        QEquipement qe = QEquipement.equipement;
+//        BooleanExpression predicate = qe.id.eq(id);
+//        return equipementRepository.findOne(predicate).orElseThrow(()->new EquipementNotFoundException("equipement not found"));
+//    }
+
+    //    @PersistenceContext
+//    private EntityManager entityManager;
 }
