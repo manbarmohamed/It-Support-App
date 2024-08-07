@@ -35,7 +35,7 @@ public class PersonController {
     }
 
     @PostMapping("addUser")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public User addUser(@RequestBody User user) {
         return personService.addUser(user);
     }

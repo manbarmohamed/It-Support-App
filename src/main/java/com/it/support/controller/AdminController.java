@@ -3,7 +3,9 @@ package com.it.support.controller;
 
 import com.it.support.model.Equipement;
 import com.it.support.model.Panne;
+import com.it.support.model.PanneEquipement;
 import com.it.support.service.EquipementService;
+import com.it.support.service.PanneEquipementService;
 import com.it.support.service.PanneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.List;
 public class AdminController {
     private final EquipementService equipementService;
     private final PanneService panneService;
+    private final PanneEquipementService panneEquipementService;
 
 
     @GetMapping("all")
@@ -71,9 +74,13 @@ public class AdminController {
     public Panne editPanne(@PathVariable Long id, @RequestBody Panne panne) throws Exception {
         return panneService.updatePanne(id,panne);
     }
-
     @DeleteMapping("delPanne/{id}")
     public void deletePanne(@PathVariable Long id) throws Exception {
         panneService.delete(id);
+    }
+    //Historique
+    @GetMapping("historique/{id)")
+    public List<PanneEquipement> historiqueEquipement(@PathVariable Long id) throws Exception {
+        return panneEquipementService.findAllByEquipementId(id);
     }
 }
