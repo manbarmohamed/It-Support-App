@@ -18,7 +18,7 @@ import java.util.List;
 public class Panne {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String nom;
     @OneToMany(mappedBy = "panne")
     private List<Ticket> tickets;
