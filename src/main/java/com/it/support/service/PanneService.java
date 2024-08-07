@@ -1,6 +1,8 @@
 package com.it.support.service;
 
 
+import com.it.support.exception.EquipementNotFoundException;
+import com.it.support.exception.PanneNotFoundException;
 import com.it.support.model.Panne;
 import com.it.support.model.QPanne;
 import com.it.support.repository.EquipementRepository;
@@ -38,7 +40,7 @@ public class PanneService {
     }
 
     public Panne updatePanne(Long id,Panne panne) {
-        Panne panneUpdated = panneRepository.findById(id).orElse(null);
+        Panne panneUpdated = panneRepository.findById(id).orElseThrow(()->new PanneNotFoundException("Panne not found"));;
         panne.setNom(panneUpdated.getNom());
         return panneRepository.save(panneUpdated);
     }

@@ -2,6 +2,8 @@ package com.it.support.service;
 
 
 import com.it.support.enums.TicketStatus;
+import com.it.support.exception.TechnicienNotFoundException;
+import com.it.support.exception.TicketNotFoundException;
 import com.it.support.model.QTicket;
 import com.it.support.model.Technicien;
 import com.it.support.model.Ticket;
@@ -33,8 +35,8 @@ public class TicketService {
     }
 
     public Ticket attribuerToTechnician(Long ticket_id, Long technician_id) {
-        Ticket ticket = ticketRepository.findById(ticket_id).orElseThrow(() -> new RuntimeException("Ticket not found"));
-        Technicien technicien = technicianRepository.findById(technician_id).orElseThrow(() -> new RuntimeException("Technician not found"));
+        Ticket ticket = ticketRepository.findById(ticket_id).orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
+        Technicien technicien = technicianRepository.findById(technician_id).orElseThrow(() -> new TechnicienNotFoundException("Technician not found"));
 
         ticket.setTechnicien(technicien);
         return ticketRepository.save(ticket);
