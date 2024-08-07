@@ -41,7 +41,7 @@ public class PanneService {
 
     public Panne updatePanne(Long id,Panne panne) {
         Panne panneUpdated = panneRepository.findById(id).orElseThrow(()->new PanneNotFoundException("Panne not found"));;
-        panne.setNom(panneUpdated.getNom());
+        panneUpdated.setNom(panne.getNom());
         return panneRepository.save(panneUpdated);
     }
 

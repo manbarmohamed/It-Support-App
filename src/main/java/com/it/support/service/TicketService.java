@@ -14,12 +14,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TicketService {
 
 
@@ -37,12 +39,12 @@ public class TicketService {
     public Ticket attribuerToTechnician(Long ticket_id, Long technician_id) {
         Ticket ticket = ticketRepository.findById(ticket_id).orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
         Technicien technicien = technicianRepository.findById(technician_id).orElseThrow(() -> new TechnicienNotFoundException("Technician not found"));
-
+        ticket.setStatus(TicketStatus.IN_PROGRESS);
         ticket.setTechnicien(technicien);
         return ticketRepository.save(ticket);
     }
 
-    public List<Ticket> findTicketsByUserAndStatus(Long userId, TicketStatus status) {
+    public List<Ticket> findTicketsByUser(Long userId) {
         QTicket ticket = QTicket.ticket;
 
         JPAQuery<Ticket> query = new JPAQuery<>(entityManager);
@@ -58,5 +60,10 @@ public class TicketService {
         return query.from(ticket)
                 .where(ticket.technicien.id.eq(technicianId))
                 .fetch();
+    }
+    public Ticket resolveTicket(Long ticket_id) {
+        Ticket ticketResolved = ticketRepository.findById(ticket_id).orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
+        ticketResolved.setStatus(TicketStatus.COMPLETED);
+        return ticketRepository.save(ticketResolved);
     }
 }
