@@ -15,6 +15,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class responsible for handling operations related to Person entities.
+ * Implements the UserDetailsService interface for Spring Security integration.
+ */
 @Service
 @RequiredArgsConstructor
 public class PersonService implements UserDetailsService {
@@ -25,6 +29,13 @@ public class PersonService implements UserDetailsService {
     private final TechnicianRepository technicianRepository;
     private final AdminRepository adminRepository;
 
+    /**
+     * Loads a user by their username for authentication purposes.
+     *
+     * @param username The username of the user to load.
+     * @return UserDetails object containing user information.
+     * @throws UsernameNotFoundException if the user is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Person user = personRepository.findByUsername(username);
@@ -37,18 +48,37 @@ public class PersonService implements UserDetailsService {
                 .roles(user.getRole().name())
                 .build();
     }
-     public User addUser(User user) {
+
+    /**
+     * Adds a new user to the system.
+     *
+     * @param user The User object to be added.
+     * @return The saved User object.
+     */
+    public User addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
-     }
-     public Technicien addTech(Technicien technicien) {
+    }
+
+    /**
+     * Adds a new technician to the system.
+     *
+     * @param technicien The Technicien object to be added.
+     * @return The saved Technicien object.
+     */
+    public Technicien addTech(Technicien technicien) {
         technicien.setPassword(passwordEncoder.encode(technicien.getPassword()));
         return technicianRepository.save(technicien);
-     }
-     public Admin addAdmin(Admin admin) {
+    }
+
+    /**
+     * Adds a new admin to the system.
+     *
+     * @param admin The Admin object to be added.
+     * @return The saved Admin object.
+     */
+    public Admin addAdmin(Admin admin) {
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         return adminRepository.save(admin);
-     }
-
-
+    }
 }

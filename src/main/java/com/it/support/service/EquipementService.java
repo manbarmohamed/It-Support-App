@@ -20,18 +20,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class EquipementService {
 
-
     private final EquipementRepository equipementRepository;
     private final UserRepository userRepository;
-
-
     private final EquipementMapper equipementMapper;
 
+    /**
+     * Retrieves all equipment records from the database and converts them to DTOs.
+     *
+     * @return List of EquipementDto containing all equipment records.
+     */
     public List<EquipementDto> findAll() {
         List<Equipement> equipements = equipementRepository.findAll();
         return equipements.stream()
@@ -39,12 +43,25 @@ public class EquipementService {
                 .toList();
     }
 
+    /**
+     * Finds a single equipment by its ID.
+     *
+     * @param id The ID of the equipment to retrieve.
+     * @return EquipementDto containing the found equipment.
+     * @throws EquipementNotFoundException if the equipment is not found.
+     */
     public EquipementDto findOne(Long id) {
         Equipement equipement = equipementRepository.findById(id)
                 .orElseThrow(() -> new EquipementNotFoundException("Equipement not found"));
         return equipementMapper.toDto(equipement);
     }
 
+    /**
+     * Saves a new equipment record to the database.
+     *
+     * @param equipementDto The equipment DTO to be saved.
+     * @return EquipementDto containing the saved equipment.
+     */
     public EquipementDto save(EquipementDto equipementDto) {
         Equipement equipement = equipementMapper.toEntity(equipementDto);
         equipement.setStatus(EquipementStatus.AVAILABLE);
@@ -52,6 +69,14 @@ public class EquipementService {
         return equipementMapper.toDto(savedEquipement);
     }
 
+    /**
+     * Updates an existing equipment record.
+     *
+     * @param id The ID of the equipment to update.
+     * @param equipementDto The DTO containing updated information.
+     * @return EquipementDto containing the updated equipment.
+     * @throws EquipementNotFoundException if the equipment is not found.
+     */
     public EquipementDto update(Long id, EquipementDto equipementDto) {
         Equipement equipementUpdated = equipementRepository.findById(id)
                 .orElseThrow(() -> new EquipementNotFoundException("Equipement not found"));
@@ -60,6 +85,13 @@ public class EquipementService {
         return equipementMapper.toDto(savedEquipement);
     }
 
+    /**
+     * Deletes an equipment record from the database.
+     *
+     * @param id The ID of the equipment to delete.
+     * @throws EquipementNotFoundException if the equipment is not found.
+     * @throws IllegalStateException if the equipment status is not INACTIVE.
+     */
     public void delete(Long id) {
         Equipement equipement = equipementRepository.findById(id)
                 .orElseThrow(() -> new EquipementNotFoundException("Equipement not found"));
@@ -71,14 +103,27 @@ public class EquipementService {
         }
     }
 
+    /**
+     * Assigns an equipment to a user and updates its status to ACTIVE.
+     *
+     * @param equipementId The ID of the equipment to assign.
+     * @param userId The ID of the user to assign the equipment to.
+     * @return Equipement containing the updated equipment entity.
+     * @throws EquipementNotFoundException if the equipment is not found.
+     * @throws UserNotFoundException if the user is not found.
+     */
     @Transactional
     public Equipement assigneEquipementToUser(Long equipementId, Long userId) {
-        Equipement equipement = equipementRepository.findById(equipementId).orElseThrow(()-> new EquipementNotFoundException("Equipement Not Found!!"));
-        User user = userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("User Not Found!!"));
+        Equipement equipement = equipementRepository.findById(equipementId)
+                .orElseThrow(() -> new EquipementNotFoundException("Equipement Not Found!!"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User Not Found!!"));
         equipement.setUser(user);
         equipement.setStatus(EquipementStatus.ACTIVE);
         return equipementRepository.save(equipement);
     }
+}
+
 
 //    public List<Equipement> findEquipementsWithPannes() {
 //        QEquipement equipement = QEquipement.equipement;
@@ -105,4 +150,4 @@ public class EquipementService {
 
     //    @PersistenceContext
 //    private EntityManager entityManager;
-}
+

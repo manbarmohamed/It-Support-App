@@ -2,6 +2,9 @@ package com.it.support.dto;
 
 import lombok.*;
 
+/**
+ * Data Transfer Object for authentication requests.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

@@ -1,6 +1,5 @@
 package com.it.support.service;
 
-
 import com.it.support.dto.AuthRequestDTO;
 import com.it.support.dto.JwtResponseDTO;
 import com.it.support.model.Person;
@@ -16,6 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class responsible for handling user authentication and JWT token generation.
+ */
 @Service
 public class UserAuthService implements UserDetailsService {
 
@@ -33,6 +35,13 @@ public class UserAuthService implements UserDetailsService {
     @Autowired
     private JwtService jwtService;
 
+    /**
+     * Loads user details by username.
+     *
+     * @param username The username of the user to be loaded.
+     * @return UserDetails object containing user information.
+     * @throws UsernameNotFoundException If the user with the specified username is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Person user = userRepository.findByUsername(username);
@@ -46,29 +55,21 @@ public class UserAuthService implements UserDetailsService {
                 .build();
     }
 
-//    public JwtResponseDTO signUp(Person userRequest) {
-//        if (userRepository.findByUsername(userRequest.getUsername()) != null) {
-//            throw new RuntimeException("Username is already taken.");
-//        }
-//        userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-//
-//        User savedUser = userRepository.save(userRequest);
-//        String token = jwtService.generateToken(savedUser.getName(),savedUser.getRole());
-//
-//        return JwtResponseDTO.builder()
-//                .accessToken(token)
-//                .user(savedUser)
-//                .build();
-//    }
-
+    /**
+     * Authenticates a user and generates a JWT token upon successful login.
+     *
+     * @param authRequestDTO The AuthRequestDTO object containing the username and password.
+     * @return JwtResponseDTO object containing the JWT token and user information.
+     * @throws UsernameNotFoundException If the authentication fails due to invalid credentials.
+     */
     public JwtResponseDTO login(AuthRequestDTO authRequestDTO) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequestDTO.getUsername(), authRequestDTO.getPassword())
         );
 
         if (authentication.isAuthenticated()) {
-            Person user =userRepository.findByUsername(authRequestDTO.getUsername());
-            String token = jwtService.generateToken(user.getName(),user.getRole());
+            Person user = userRepository.findByUsername(authRequestDTO.getUsername());
+            String token = jwtService.generateToken(user.getName(), user.getRole());
 
             return JwtResponseDTO.builder()
                     .accessToken(token)
@@ -77,5 +78,4 @@ public class UserAuthService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException("Invalid user request.");
         }
-    }
-}
+    }}
