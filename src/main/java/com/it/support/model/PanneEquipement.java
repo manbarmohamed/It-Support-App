@@ -1,9 +1,16 @@
 package com.it.support.model;
 
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+/**
+ * Represents the association between a panne (failure or issue) and equipment.
+ *
+ * This class maps to a composite key that links `Equipement` and `Panne` entities.
+ */
 @Entity
 @Getter
 @Setter
@@ -11,18 +18,25 @@ import lombok.*;
 @AllArgsConstructor
 public class PanneEquipement {
 
+    /**
+     * The composite primary key for this association.
+     */
     @EmbeddedId
-    PanneEquipementKey id;
+    private PanneEquipementKey id;
 
+    /**
+     * The equipment associated with this panne.
+     */
     @ManyToOne
-    @MapsId("equipement_id")
+    @MapsId("equipementId")
     @JoinColumn(name = "equipement_id")
     private Equipement equipement;
 
+    /**
+     * The panne associated with this equipment.
+     */
     @ManyToOne
-    @MapsId("panne_id")
+    @MapsId("panneId")
     @JoinColumn(name = "panne_id")
     private Panne panne;
-
-
 }
