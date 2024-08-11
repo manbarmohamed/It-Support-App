@@ -18,14 +18,14 @@ public class EquipmentController {
     private final EquipementService equipementService;
 
     @GetMapping("/admin/allEquipment")
-    public ResponseEntity<List<EquipementDto>> getAllEquipements() {
-        List<EquipementDto> equipements = equipementService.findAll();
-        return ResponseEntity.ok(equipements);
+    public ResponseEntity<List<Equipement>> getAllEquipements() {
+        List<Equipement> equipment = equipementService.findAll();
+        return ResponseEntity.ok(equipment);
     }
 
     @GetMapping("/admin/getEquipmentById/{id}")
-    public ResponseEntity<EquipementDto> getEquipementById(@PathVariable Long id) {
-        EquipementDto equipement = equipementService.findOne(id);
+    public ResponseEntity<Equipement> getEquipementById(@PathVariable Long id) {
+        Equipement equipement = equipementService.findOne(id);
         return ResponseEntity.ok(equipement);
     }
 

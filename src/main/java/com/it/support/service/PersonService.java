@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Service class responsible for handling operations related to Person entities.
  * Implements the UserDetailsService interface for Spring Security integration.
@@ -80,5 +82,12 @@ public class PersonService implements UserDetailsService {
     public Admin addAdmin(Admin admin) {
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         return adminRepository.save(admin);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+    public List<Technicien> getAllTechniciens() {
+        return technicianRepository.findAll();
     }
 }
