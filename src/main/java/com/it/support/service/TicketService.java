@@ -103,9 +103,9 @@ public class TicketService {
      * @param userId The ID of the user whose tickets are to be retrieved.
      * @return A list of TicketDto objects associated with the user.
      */
-    public List<TicketDto> findTicketsByUser(Long userId) {
+    public List<Ticket> findTicketsByUser(Long userId) {
         List<Ticket> tickets = ticketRepository.findAllByUserId(userId);
-        return ticketMapper.toDto(tickets);
+        return tickets;
     }
 
     /**
@@ -114,8 +114,13 @@ public class TicketService {
      * @param technicianId The ID of the technician whose tickets are to be retrieved.
      * @return A list of TicketDto objects assigned to the technician.
      */
-    public List<TicketDto> findTicketsByTechnician(Long technicianId) {
+    public List<Ticket> findTicketsByTechnician(Long technicianId) {
         List<Ticket> tickets = ticketRepository.findAllByTechnicienId(technicianId);
-        return ticketMapper.toDto(tickets);
+        return tickets;
+    }
+
+    public Ticket findTicketById(Long ticketId) {
+        Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(()-> new TicketNotFoundException("Ticket not found"));
+        return ticket;
     }
 }
