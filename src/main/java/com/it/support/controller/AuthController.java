@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin("*")
@@ -48,5 +50,14 @@ public class AuthController {
     public Admin addAdmin(@RequestBody Admin admin) {
         return personService.addAdmin(admin);
     }
+    @GetMapping("/admin/allUser")
+    public List<User> allUser() {
+        return personService.getAllUsers();
+    }
+    @GetMapping("/admin/allTech")
+    public List<Technicien> allTech() {
+        return personService.getAllTechniciens();
+    }
+
 
 }

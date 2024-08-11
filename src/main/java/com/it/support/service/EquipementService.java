@@ -36,11 +36,9 @@ public class EquipementService {
      *
      * @return List of EquipementDto containing all equipment records.
      */
-    public List<EquipementDto> findAll() {
+    public List<Equipement> findAll() {
         List<Equipement> equipements = equipementRepository.findAll();
-        return equipements.stream()
-                .map(equipementMapper::toDto)
-                .toList();
+        return equipements;
     }
 
     /**
@@ -50,10 +48,10 @@ public class EquipementService {
      * @return EquipementDto containing the found equipment.
      * @throws EquipementNotFoundException if the equipment is not found.
      */
-    public EquipementDto findOne(Long id) {
+    public Equipement findOne(Long id) {
         Equipement equipement = equipementRepository.findById(id)
                 .orElseThrow(() -> new EquipementNotFoundException("Equipement not found"));
-        return equipementMapper.toDto(equipement);
+        return equipement;
     }
 
     /**
