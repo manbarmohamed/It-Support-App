@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-
+@CrossOrigin("*")
 public class PanneController {
 
     private final PanneService panneService;
