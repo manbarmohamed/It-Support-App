@@ -4,6 +4,8 @@ import com.it.support.dto.TicketDto;
 import com.it.support.model.Ticket;
 import org.mapstruct.*;
 
+import java.util.List;
+
 /**
  * Mapper interface for converting between Ticket entities and TicketDto objects.
  * Uses MapStruct for generating mapping code at compile time.
@@ -19,6 +21,9 @@ public interface TicketMapper {
      */
     Ticket toEntity(TicketDto ticketDto);
 
+    List<Ticket> toEntity(List<TicketDto> ticketDto);
+
+
     /**
      * Converts a Ticket entity to a TicketDto object.
      *
@@ -26,6 +31,8 @@ public interface TicketMapper {
      * @return the converted TicketDto object
      */
     TicketDto toDto(Ticket ticket);
+
+    List<TicketDto> toDto(List<Ticket> ticket);
 
     /**
      * Partially updates a Ticket entity with values from a TicketDto object.

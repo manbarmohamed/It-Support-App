@@ -1,17 +1,21 @@
 package com.it.support.service;
 
 import com.it.support.dto.TicketDto;
+import com.it.support.enums.EquipementStatus;
 import com.it.support.enums.TicketStatus;
+import com.it.support.exception.EquipementNotFoundException;
+import com.it.support.exception.PanneNotFoundException;
 import com.it.support.exception.TechnicienNotFoundException;
 import com.it.support.exception.TicketNotFoundException;
 import com.it.support.mapper.TicketMapper;
-import com.it.support.model.Technicien;
-import com.it.support.model.Ticket;
-import com.it.support.repository.TechnicianRepository;
-import com.it.support.repository.TicketRepository;
+import com.it.support.model.*;
+import com.it.support.repository.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,12 +30,14 @@ import java.util.List;
 @Transactional
 public class TicketService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+
 
     private final TicketRepository ticketRepository;
     private final TechnicianRepository technicianRepository;
     private final TicketMapper ticketMapper;
+    private final UserRepository userRepository;
+    private final PanneRepository panneRepository;
+    private final EquipementRepository equipementRepository;
 
     /**
      * Saves a new ticket in the system.
@@ -39,8 +45,15 @@ public class TicketService {
      * @param ticketDto The TicketDto object containing ticket details.
      * @return The saved TicketDto object.
      */
-    public TicketDto save(TicketDto ticketDto) {
+    public TicketDto save(TicketDto ticketDto, Long equipement_id, Long panne_id) {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsername(loggedInUser.getName());
+        Equipement equipement = equipementRepository.findById(equipement_id).orElseThrow(()-> new EquipementNotFoundException("Equipment not found"));
+        Panne panne = panneRepository.findById(panne_id).orElseThrow(()-> new PanneNotFoundException("Panne not found"));
         Ticket ticket = ticketMapper.toEntity(ticketDto);
+        ticket.setUser(user);
+        ticket.setEquipement(equipement);
+        ticket.setPanne(panne);
         ticket.setStatus(TicketStatus.PENDING);
         ticket.setDateCreation(LocalDate.now());
         Ticket savedTicket = ticketRepository.save(ticket);
@@ -78,7 +91,9 @@ public class TicketService {
         Ticket ticketResolved = ticketRepository.findById(ticket_id)
                 .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
         ticketResolved.setStatus(TicketStatus.COMPLETED);
+        ticketResolved.getEquipement().setStatus(EquipementStatus.ACTIVE);
         Ticket updatedTicket = ticketRepository.save(ticketResolved);
+        System.out.println(updatedTicket.getStatus());
         return ticketMapper.toDto(updatedTicket);
     }
 
@@ -89,10 +104,8 @@ public class TicketService {
      * @return A list of TicketDto objects associated with the user.
      */
     public List<TicketDto> findTicketsByUser(Long userId) {
-        List<Ticket> tickets = ticketRepository.findByUserId(userId);
-        return tickets.stream()
-                .map(ticketMapper::toDto)
-                .toList();
+        List<Ticket> tickets = ticketRepository.findAllByUserId(userId);
+        return ticketMapper.toDto(tickets);
     }
 
     /**
@@ -102,9 +115,7 @@ public class TicketService {
      * @return A list of TicketDto objects assigned to the technician.
      */
     public List<TicketDto> findTicketsByTechnician(Long technicianId) {
-        List<Ticket> tickets = ticketRepository.findByTechnicienId(technicianId);
-        return tickets.stream()
-                .map(ticketMapper::toDto)
-                .toList();
+        List<Ticket> tickets = ticketRepository.findAllByTechnicienId(technicianId);
+        return ticketMapper.toDto(tickets);
     }
 }

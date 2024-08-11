@@ -25,7 +25,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
      * @param userId the ID of the user
      * @return a list of {@link Ticket} entities associated with the given user ID
      */
-    List<Ticket> findByUserId(Long userId);
+    List<Ticket> findAllByUserId(Long userId);
 
     /**
      * Finds all {@link Ticket} entities associated with a specific technician ID.
@@ -33,5 +33,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
      * @param technicienId the ID of the technician
      * @return a list of {@link Ticket} entities associated with the given technician ID
      */
-    List<Ticket> findByTechnicienId(Long technicienId);
+    List<Ticket> findAllByTechnicienId(Long technicienId);
 }
