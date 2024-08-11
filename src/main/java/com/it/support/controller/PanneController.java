@@ -2,6 +2,7 @@ package com.it.support.controller;
 
 
 import com.it.support.dto.PanneDto;
+import com.it.support.model.Panne;
 import com.it.support.service.PanneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,8 @@ public class PanneController {
     private final PanneService panneService;
 
     @GetMapping("/admin/allPanne")
-    public ResponseEntity<List<PanneDto>> getAllPannes() {
-        List<PanneDto> pannes = panneService.findAll();
+    public ResponseEntity<List<Panne>> getAllPannes() {
+        List<Panne> pannes = panneService.findAll();
         return ResponseEntity.ok(pannes);
     }
     @PostMapping("/admin/savePanne")
@@ -34,5 +35,10 @@ public class PanneController {
     @DeleteMapping("/admin/delPanne/{id}")
     public void deletePanne(@PathVariable Long id)  {
         panneService.delete(id);
+    }
+
+    @GetMapping("/admin/getById/{id}")
+    public PanneDto getPanneById(@PathVariable Long id) {
+        return panneService.getPanneById(id);
     }
 }

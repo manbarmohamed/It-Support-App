@@ -34,11 +34,9 @@ public class PanneService {
      *
      * @return A list of PanneDto objects representing all pannes.
      */
-    public List<PanneDto> findAll() {
-        List<Panne> pannes = panneRepository.findAll();
-        return pannes.stream()
-                .map(panneMapper::toDto)
-                .toList();
+    public List<Panne> findAll() {
+
+        return panneRepository.findAll();
     }
 
     /**
@@ -64,5 +62,10 @@ public class PanneService {
         panneMapper.partialUpdate(panneDto, panneUpdated);
         Panne savedPanne = panneRepository.save(panneUpdated);
         return panneMapper.toDto(savedPanne);
+    }
+
+    public PanneDto getPanneById(Long id) {
+        Panne panne = panneRepository.findById(id).orElseThrow(() -> new PanneNotFoundException("Panne not found"));
+        return panneMapper.toDto(panne);
     }
 }
