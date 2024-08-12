@@ -2,8 +2,12 @@ package com.it.support.controller;
 
 
 import com.it.support.dto.PanneDto;
+import com.it.support.dto.SaveTicketDto;
 import com.it.support.model.Panne;
+import com.it.support.model.Ticket;
+import com.it.support.repository.TicketRepository;
 import com.it.support.service.PanneService;
+import com.it.support.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +20,14 @@ import java.util.List;
 public class PanneController {
 
     private final PanneService panneService;
+    private final TicketService ticketService;
+    private final TicketRepository ticketRepository;
+
+
+    @PostMapping("/user/savet")
+    public String saveTicket(@RequestBody SaveTicketDto ticketDto) {
+        return ticketService.saveTicket(ticketDto);
+    }
 
     @GetMapping("/admin/allPanne")
     public ResponseEntity<List<Panne>> getAllPannes() {
