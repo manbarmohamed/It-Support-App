@@ -25,9 +25,9 @@ public class TicketController {
         return ResponseEntity.ok(updatedTicket);
     }
 
-    @GetMapping("/tech/ticketByTechnician/{technicianId}")
-    public ResponseEntity<List<Ticket>> getTicketsByTechnician(@PathVariable Long technicianId) {
-        List<Ticket> tickets = ticketService.findTicketsByTechnician(technicianId);
+    @GetMapping("/tech/ticketByTechnician")
+    public ResponseEntity<List<Ticket>> getTicketsByTechnician() {
+        List<Ticket> tickets = ticketService.findTicketsByTechnician();
         return ResponseEntity.ok(tickets);
     }
     @PutMapping("/tech/{ticketId}/resolve")
