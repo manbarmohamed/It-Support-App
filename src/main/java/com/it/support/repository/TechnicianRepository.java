@@ -14,7 +14,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface TechnicianRepository extends JpaRepository<Technicien, Long> {
-    // Additional query methods can be defined here if needed.
-    // For example:
-    // List<Technicien> findBySpecialization(String specialization);
+    Technicien findByUsername(String username);
 }

@@ -101,7 +101,7 @@ public class TicketService {
     /**
      * Resolves a ticket and updates its status to COMPLETED.
      *
-     * @param ticket_id The ID of the ticket to be resolved.
+     * @param ticketId The ID of the ticket to be resolved.
      * @return The updated TicketDto object.
      * @throws TicketNotFoundException If the ticket is not found.
      */
@@ -110,11 +110,8 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        // Set the ticket status to RESOLVED
         ticket.setStatus(TicketStatus.COMPLETED);
         ticketRepository.save(ticket);
-
-        // Set the equipment status to ACTIVE if associated equipment exists
         Equipement equipement = ticket.getEquipement();
         if (equipement != null) {
             equipement.setStatus(EquipementStatus.ACTIVE);
@@ -137,12 +134,12 @@ public class TicketService {
     /**
      * Finds all tickets assigned to a specific technician.
      *
-     * @param technicianId The ID of the technician whose tickets are to be retrieved.
      * @return A list of TicketDto objects assigned to the technician.
      */
-    public List<Ticket> findTicketsByTechnician(Long technicianId) {
-        List<Ticket> tickets = ticketRepository.findAllByTechnicienId(technicianId);
-        return tickets;
+    public List<Ticket> findTicketsByTechnician() {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Technicien technicien = technicianRepository.findByUsername(loggedInUser.getName());
+        return ticketRepository.findAllByTechnicienId(technicien.getId());
     }
 
     public Ticket findTicketById(Long ticketId) {
