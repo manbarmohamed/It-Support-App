@@ -42,7 +42,6 @@ public abstract class Person {
     /**
      * The password of the person.
      */
-    @JsonIgnore
     private String password;
 
     /**
