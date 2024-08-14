@@ -48,7 +48,7 @@ public class EquipmentController {
     }
 
     @PostMapping("/admin/assignEqToUser/{equipementId}/{userId}")
-    public Equipement assignEquipementToUser(@PathVariable Long equipementId, @PathVariable Long userId) {
+    public Equipement assignEquipementToUser(@PathVariable("equipementId") Long equipementId, @PathVariable("userId") Long userId) {
         return equipementService.assigneEquipementToUser(equipementId, userId);
     }
 }

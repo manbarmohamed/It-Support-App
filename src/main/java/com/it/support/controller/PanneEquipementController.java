@@ -19,7 +19,7 @@ public class PanneEquipementController {
         return panneEquipementService.signalPanne(panne_id, equipement_id);
     }
     @GetMapping("/admin/historique/{id}")
-    public List<PanneEquipement> historiqueEquipement(@PathVariable Long id){
+    public List<PanneEquipement> historiqueEquipement(@PathVariable("id") Long id){
         return panneEquipementService.findAllByEquipementId(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.it.support.service;
 
+import com.it.support.enums.Role;
 import com.it.support.model.Admin;
 import com.it.support.model.Person;
 import com.it.support.model.Technicien;
@@ -59,6 +60,7 @@ public class PersonService implements UserDetailsService {
      */
     public User addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.USER);
         return userRepository.save(user);
     }
 
@@ -69,6 +71,7 @@ public class PersonService implements UserDetailsService {
      * @return The saved Technicien object.
      */
     public Technicien addTech(Technicien technicien) {
+        technicien.setRole(Role.TECH);
         technicien.setPassword(passwordEncoder.encode(technicien.getPassword()));
         return technicianRepository.save(technicien);
     }
