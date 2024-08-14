@@ -1,8 +1,11 @@
 package com.it.support.repository;
 
+import com.it.support.enums.EquipementStatus;
 import com.it.support.model.Equipement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Repository interface for performing CRUD operations on {@link Equipement} entities.
@@ -15,7 +18,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EquipementRepository extends JpaRepository<Equipement, Long> {
 
-    // Additional query methods can be defined here if needed.
-    // For example:
-    // List<Equipement> findByStatus(EquipementStatus status);
+
+    List<Equipement> findByStatus(EquipementStatus status);
 }

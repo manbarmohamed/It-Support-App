@@ -41,6 +41,9 @@ public class EquipementService {
         return equipements;
     }
 
+    public List<Equipement> findAllAvailableEquipements() {
+        return equipementRepository.findByStatus(EquipementStatus.AVAILABLE);
+    }
     /**
      * Finds a single equipment by its ID.
      *
