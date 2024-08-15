@@ -51,8 +51,17 @@ public class EquipmentController {
     public Equipement assignEquipementToUser(@PathVariable("equipementId") Long equipementId, @PathVariable("userId") Long userId) {
         return equipementService.assigneEquipementToUser(equipementId, userId);
     }
+
     @GetMapping("/admin/available")
     public List<Equipement> getAllAvailableEquipements() {
         return equipementService.findAllAvailableEquipements();
+    }
+    @GetMapping("/user/paneEquipement")
+    public List<Equipement> getAllpanneEquipements() {
+        return equipementService.findAllPanneEquipements();
+    }
+    @GetMapping("/user/ByUser")
+    public List<Equipement> findByUser(){
+        return equipementService.finByUserId();
     }
 }

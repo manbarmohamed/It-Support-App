@@ -5,6 +5,7 @@ import com.it.support.model.Equipement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 /**
@@ -20,4 +21,6 @@ public interface EquipementRepository extends JpaRepository<Equipement, Long> {
 
 
     List<Equipement> findByStatus(EquipementStatus status);
+    long countByStatus(EquipementStatus status);
+    List<Equipement> findByUserId(Long userId);
 }

@@ -4,6 +4,8 @@ import com.it.support.dto.EquipementDto;
 import com.it.support.model.Equipement;
 import org.mapstruct.*;
 
+import java.util.List;
+
 /**
  * Mapper interface for converting between Equipement entities and EquipementDto objects.
  * Utilizes MapStruct to automatically generate implementation code at compile time.
@@ -25,8 +27,9 @@ public interface EquipementMapper {
      * @param equipement the entity to convert
      * @return the converted EquipementDto object
      */
-    EquipementDto toDto(Equipement equipement);
 
+    EquipementDto toDto(Equipement equipement);
+    List<EquipementDto> toDto(List<Equipement> equipements);
     /**
      * Partially updates an Equipement entity with values from an EquipementDto object.
      * Null properties in EquipementDto are ignored during mapping.

@@ -60,13 +60,13 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-//                                .requestMatchers("/public/**").permitAll() // Allow public access to "/public/**".
-//                                .requestMatchers("/admin/**").hasRole(Role.ADMIN.name()) // Restrict access to "/admin/**" to ADMIN role.
-//                                .requestMatchers("/user/**").hasRole(Role.USER.name()) // Restrict access to "/user/**" to USER role.
-//                                .requestMatchers("/tech/**").hasRole(Role.TECH.name()) // Restrict access to "/tech/**" to TECH role.
-//                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Allow access to Swagger UI and API docs.
-//                                .anyRequest().authenticated() // Require authentication for all other requests.
-                                .anyRequest().permitAll()
+                                .requestMatchers("/public/**").permitAll() // Allow public access to "/public/**".
+                                .requestMatchers("/admin/**").hasRole(Role.ADMIN.name()) // Restrict access to "/admin/**" to ADMIN role.
+                                .requestMatchers("/user/**").hasRole(Role.USER.name()) // Restrict access to "/user/**" to USER role.
+                                .requestMatchers("/tech/**").hasRole(Role.TECH.name()) // Restrict access to "/tech/**" to TECH role.
+                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Allow access to Swagger UI and API docs.
+                                .anyRequest().authenticated() // Require authentication for all other requests.
+                                //.anyRequest().permitAll()
 
                 );
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // Add custom JWT filter before the default UsernamePasswordAuthenticationFilter.
