@@ -15,6 +15,8 @@ import com.it.support.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +43,12 @@ public class EquipementService {
         return equipements;
     }
 
+    public List<Equipement> findAllAvailableEquipements() {
+        return equipementRepository.findByStatus(EquipementStatus.AVAILABLE);
+    }
+    public List<Equipement> findAllPanneEquipements() {
+        return equipementRepository.findByStatus(EquipementStatus.PANE);
+    }
     /**
      * Finds a single equipment by its ID.
      *
@@ -119,6 +127,13 @@ public class EquipementService {
         equipement.setUser(user);
         equipement.setStatus(EquipementStatus.ACTIVE);
         return equipementRepository.save(equipement);
+    }
+
+    public List<Equipement> finByUserId(){
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("--------------------"+loggedInUser.getName());
+        User user = userRepository.findByUsername(loggedInUser.getName());
+        return equipementRepository.findByUserId(user.getId());
     }
 }
 

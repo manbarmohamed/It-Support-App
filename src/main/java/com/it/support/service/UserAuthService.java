@@ -69,7 +69,7 @@ public class UserAuthService implements UserDetailsService {
 
         if (authentication.isAuthenticated()) {
             Person user = userRepository.findByUsername(authRequestDTO.getUsername());
-            String token = jwtService.generateToken(user.getName(), user.getRole());
+            String token = jwtService.generateToken(user.getUsername(), user.getRole());
 
             return JwtResponseDTO.builder()
                     .accessToken(token)

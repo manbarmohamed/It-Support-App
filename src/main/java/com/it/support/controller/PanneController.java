@@ -29,7 +29,7 @@ public class PanneController {
         return ticketService.saveTicket(ticketDto);
     }
 
-    @GetMapping("/admin/allPanne")
+    @GetMapping("/public/allPanne")
     public ResponseEntity<List<Panne>> getAllPannes() {
         List<Panne> pannes = panneService.findAll();
         return ResponseEntity.ok(pannes);

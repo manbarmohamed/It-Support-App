@@ -160,6 +160,8 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>it_support</finalName>
+
 	</build>
 
 </project>
